@@ -17,7 +17,7 @@ void * th_fun(void * arg)
 	{
 		i++;
 		//pthread_testcancel();
-		write(1,name,strlen(name));
+		write(1,name,strlen(name) + 1);
 	}
 
 }
