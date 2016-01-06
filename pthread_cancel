@@ -1,0 +1,39 @@
+在同一个进程中的线程间：
+	一个线程调用pthread_cancel()取消一个线程的时候，
+	系统并不会马上关闭被取消的线程，只有在被取消的线程下次系统调用的时候
+	才会真正结束线程，或者调用pthread_testcancel()让内核区检测是否需要取消当先线程。
+
+#include <pthread.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+void * th_fun(void * arg)
+{
+	int i = 0;
+	char * name = "leesagacious";
+	while(1)
+	{
+		i++;
+		//pthread_testcancel();
+		write(1,name,strlen(name));
+	}
+
+}
+
+int main(int argc, char const *argv[])
+{
+	pthread_t tid;
+	int n = 10;
+
+	pthread_create(&tid,NULL,th_fun,(void *)&n);
+	
+	pthread_cancel(tid);
+	while(1)
+	{
+		sleep(1);
+	}
+
+	return 0;
+}	
